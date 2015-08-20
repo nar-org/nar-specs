@@ -41,7 +41,8 @@ Size : 64 bytes (8 Word64) - unused bytes set to 0
 
 ## Item Header
 
-Every item in a NAR archive need to start by an item header. The header is 256bits (4 Word64, 32 bytes) and is composed of:
+Every item in a NAR archive need to start by an item header.
+Size: 32 bytes (4 Word64) - unused bytes set to 0
 
 | Index | Size | Description |
 | ------| ---- | ----------- |
@@ -54,3 +55,15 @@ The header is directly followed by the item payload. The next item header can be
 
     current item header position + 32 bytes + ROUND_UP64(length1) + ROUND_UP64(length2)
 
+### Flags
+
+The Item Header Flags is split into 2 fields: one for common purpose, one for per-item purpose:
+
+| Index | Bits | Description |
+| ----- | ---- | ----------- |
+| 0     | 0    | compression content 1 |
+|       | 1    | cipher content 1 |
+|       | 2    | compression content 2 |
+|       | 3    | cipher content 2 |
+|       | 4-15 | not used yet. must be set to 0 for future purpose |
+| 2     | 6    | saved for per-item purpose |
