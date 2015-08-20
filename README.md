@@ -1,18 +1,15 @@
-NAR (New ARchiver)
-==================
+# NAR (New ARchiver)
 
 Author: Nicolas DI PRIMA, Vincent HANQUEZ
 
-Introduction
-------------
+## Introduction
 
 What do we solve:
 
 * simple format for packing data with simple length specification for filepath and content.
 * integrate compression, encryption, authenticated data and signature.
 
-Requirements
-------------
+## Requirements
 
 * indexable / mmap friendly
 * no filepath size limitation (within reason !)
@@ -20,11 +17,12 @@ Requirements
 * 64 bits little endian friendly, no per byte access, every fields aligned to 64 bits.
 
 
-Metadata
---------
+# Metadata
 
-NAR Header
-----------
+In this document:
+* **Position** means the exact position in the NAR document (if it is in a File, it means it is the n-th byte).
+
+## NAR Header
 
 Size : 64 bytes (8 Word64) - unused bytes set to 0
 
@@ -34,13 +32,14 @@ Size : 64 bytes (8 Word64) - unused bytes set to 0
 | 8     | 8    | format version (upper 32 bits) + software version (lower 32 bits) |
 | 16    | 8    | cipher type. 0 no cipher |
 | 24    | 8    | compression type. 0 no compression. |
-| 32    | 8    | signature position (0 == no signature header) |
-| 40    | 8    | index position (0 == no index header) |
+| 32    | 8    | signature **position** (optional, 0 == maybe no signature header)\* |
+| 40    | 8    | index **position** (optional, 0 == maybe no index header)\* |
 | 48    | 8    | unused1 (0) |
 | 56    | 8    | unused2 (0) |
 
-Item Header
------------
+\* a server, streaming content to a client, might not be able to know the position of the signature or the index until the end of the stream. These **positions** are only given in order to facilitate access to these items.
+
+## Item Header
 
 Every item in a NAR archive need to start by an item header. The header is 256bits (4 Word64, 32 bytes) and is composed of:
 
