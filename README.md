@@ -42,6 +42,7 @@ Size : 64 bytes (8 Word64) - unused bytes set to 0
 ## Item Header
 
 Every item in a NAR archive need to start by an item header.
+
 Size: 32 bytes (4 Word64) - unused bytes set to 0
 
 | Index | Size | Description |
@@ -57,7 +58,7 @@ The header is directly followed by the item payload. The next item header can be
 
 ### Flags
 
-The Item Header Flags is split into 2 fields: one for common purpose, one for per-item purpose:
+The Item Header Flags is split into 2 fields: one for common purpose, one for per-item purpose.
 
 | Index | Bits | Description |
 | ----- | ---- | ----------- |
