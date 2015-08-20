@@ -28,27 +28,28 @@ NAR Header
 
 Size : 64 bytes (8 Word64) - unused bytes set to 0
 
-| Field num | Index in bits | Size | Description |
-| --------- | ------------- | ---- | ----------- |
-| 0         | 0             | u64  | magic signature: ASCII string “[ NARH ]” |
-| 1         | 64            | u64  | format version (upper 32 bits) + software version (lower 32 bits) |
-| 2         | 128           | u64  | cipher type. 0 no cipher |
-| 3         | 192           | u64  | compression type. 0 no compression. |
-| 4         | 256           | u64  | signature position (0 == no signature header) |
-| 5         | 320           | u64  | index position (0 == no index header) |
-| 6         | 384           | 2 u64 | unused (0) |
+| Index | Size | Description |
+| ----- | ---- | ----------- |
+| 0     | 8    | magic signature: ASCII string “[ NARH ]” |
+| 8     | 8    | format version (upper 32 bits) + software version (lower 32 bits) |
+| 16    | 8    | cipher type. 0 no cipher |
+| 24    | 8    | compression type. 0 no compression. |
+| 32    | 8    | signature position (0 == no signature header) |
+| 40    | 8    | index position (0 == no index header) |
+| 48    | 8    | unused1 (0) |
+| 56    | 8    | unused2 (0) |
 
 Item Header
 -----------
 
 Every item in a NAR archive need to start by an item header. The header is 256bits (4 Word64, 32 bytes) and is composed of:
 
-| Field Num | Index in bits | Size | Description |
-| --------- | ------------- | ---- | ----------- |
-| 0         | 0             | u64  | item header signature (usually ASCII string) |
-| 1         | 64            | u64  | flags    |
-| 2         | 128           | u64  | length 1 |
-| 3         | 192           | u64  | length 2 |
+| Index | Size | Description |
+| ------| ---- | ----------- |
+| 0     | 8    | item header signature (usually ASCII string) |
+| 8     | 8    | flags    |
+| 16    | 8    | length 1 |
+| 24    | 8    | length 2 |
 
 The header is directly followed by the item payload. The next item header can be found at offset:
 
