@@ -16,7 +16,7 @@ Requirements
 
 * indexable / mmap friendly
 * no filepath size limitation (within reason !)
-* Word64 for length (2 exbibytes maximum per file)
+* Word64 for length (2 exbibytes maximum per item)
 * 64 bits little endian friendly, no per byte access, every fields aligned to 64 bits.
 
 
@@ -41,7 +41,7 @@ Size : 64 bytes (8 Word64) - unused bytes set to 0
 Item Header
 -----------
 
-Every item in a NAR archive need to start by an item header. The header is 256bits (4 Word64, 16 bytes) and is composed of:
+Every item in a NAR archive need to start by an item header. The header is 256bits (4 Word64, 32 bytes) and is composed of:
 
 | Field Num | Index in bits | Size | Description |
 | --------- | ------------- | ---- | ----------- |
@@ -52,5 +52,31 @@ Every item in a NAR archive need to start by an item header. The header is 256bi
 
 The header is directly followed by the item payload. The next item header can be found at offset:
 
-    current item header position + 32 bytes + ROUND_UP64(length1) + ROUND_UP64(length2)
+    current item header position + 32 bytes (item header size) + ROUND_UP64(length1) + ROUND_UP64(length2)
+
+Note: The previous formula make sure that every item header is 64 bits aligned.
+
+Specific Item Header
+--------------------
+
+A file item start by a item header where the item values are / represent:
+
+* item header signature: "[ FILE ]"
+* flags: bitfields of
+  * bit 0 : executable
+  * bit 1 : compression
+  * bit 2 : ciphering
+  * bit 3-63 : unused (need to be 0)
+* length 1: filepath length
+* length 2: file length (after compression, and after ciphering. i.e. size of the blob)
+
+Then the item data are:
+
+| Field      | Index in bytes                | Size in bytes                 |
+| ---------- | ----------------------------- | ----------------------------- |
+| filepath   | 0                             | length1                       |
+| padding    | length1                       | ROUND_UP64(length1) - length1 |
+| file data  | ROUND_UP64(length1)           | length2                       |
+| padding    | ROUND_UP64(length1) + length2 | ROUND_UP64(length2) - length2 |
+
 
