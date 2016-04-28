@@ -80,9 +80,28 @@ Then the item data are:
 
 The Item Header Flags is split into 2 fields: one for common purpose at the lowest bits (10 bits), one for per-item purpose at the highest bits.
 
+
 | Bits | Description |
 | ---- | ----------- |
 | 0    | compression content 1 |
 | 1    | compression content 2 |
 | 2-9  | not used yet. must be set to 0 for future purpose |
 | 10-63| per-item meaning |
+
+### Compression
+
+When compression bit is set, the data starts with a compression header of 8 bytes to define which type of compression is used for the rest of the data stream.
+
+### Signature
+
+Signed content starts with `Signature Start` item header and finish with a `Signature End` item header.
+The start event starts a new cryptographic hashing context, where all further bytes will be appended to his hashing context until the end event, which will contains the cryptographic signature of the hash generated.
+
+The signature start item must contains the hash algorithm to use.
+The signature end item must contains the type of signature algorithm, and the signature itself.
+
+## NAR Index
+
+NAR Items have specific positions, and it may be useful to generate a fast lookup index.
+
+format to be defined
