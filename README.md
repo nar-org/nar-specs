@@ -120,8 +120,8 @@ compatibility as it contains the version of the NAR format used.
 A file item start by a item header where the item values are / represent:
 
 * Magic Signature:
-  * **hexadecimal**: 0x5d204852414e205b;
-  * **decimal**: 6710442962902196315;
+  * **hexadecimal**: 0x5d20454c4946205b;
+  * **decimal**: 6710439638731202651;
   * **string**: [ FILE ];
 * flags: see below;
 * length1: filepath length;
